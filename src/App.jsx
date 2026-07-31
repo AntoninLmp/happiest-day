@@ -1,32 +1,39 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import Letter from './components/Letter';
+import Message from './components/Message';
 
+const REVEAL_TOTAL_MS = 10000; // durée avant de passer à la page principale
 
 function App() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [stage, setStage] = useState('closed'); // 'closed' | 'message' | 'open'
+
+  const envelopeOpen = stage !== 'closed';
+  const messageVisible = stage === 'message';
+  const pageVisible = stage === 'open';
 
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'auto' : 'hidden'
+    document.body.style.overflow = pageVisible ? 'auto' : 'hidden'
     return () => {
       document.body.style.overflow = 'auto'
     }
-  }, [isOpen])
+  }, [pageVisible])
+
+  const handleOpenEnvelope = () => {
+    if (stage !== 'closed') return;
+    setStage('message');
+    setTimeout(() => {
+      setStage('open');
+    }, REVEAL_TOTAL_MS);
+  };
 
   return (
     <div className="app">
-      <Letter isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Letter isOpen={envelopeOpen} setIsOpen={handleOpenEnvelope} />
 
-      <main className={`page ${isOpen ? "visible" : ""}`}>
-        <section className="hero-section">
-          <div className="hero-content">
-            <p className="pretitle">Le plus beau jour</p>
-            <h1>Notre mariage coloré</h1>
-            <p className="subtitle">
-              Venez célébrer l’amour, les couleurs et la joie avec nous.
-            </p>
-          </div>
-        </section>
+      <Message visible={messageVisible} />
+
+      <main className={`page ${pageVisible ? "visible" : ""}`}>
 
         <section className="details-section">
           <article>
@@ -44,7 +51,7 @@ function App() {
         </section>
 
         <section className="story-section">
-          <h2>Merci d’être là</h2>
+          <h2>Merci d'être là</h2>
           <p>
             Nous avons hâte de partager ce moment unique avec vous, entourés de
             rires, de musique et de pensées colorées.
