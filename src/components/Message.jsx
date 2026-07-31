@@ -4,8 +4,8 @@ function Message({ visible }) {
   const { name, plural } = useGuestName();
 
   const invites =  `${name}`;
-  const message = `vous êtes ${plural ? 'invités' : 'invité'} à venir célébrer`;
-  const story = `le plus beau jour de notre vie !`;
+  const message = `vous êtes ${plural ? 'invités' : 'invité'} à célébrer notre`;
+  const story = `amour et à partager notre bonheur !`;
 
   const sizeInvites = invites.split(' ').length;
   const sizeMessage = message.split(' ').length;
