@@ -92,7 +92,7 @@ function ScratchCircle({ label, value }) {
 
   return (
     <div className="scratch-circle" style={{ width: size, height: size }}>
-      <div className="scratch-value">
+      <div className="scratch-value c-orange">
         <span>{value}</span>
       </div>
       <canvas
@@ -106,7 +106,7 @@ function ScratchCircle({ label, value }) {
         onTouchMove={handleMove}
         onTouchEnd={handleEnd}
       />
-      <p className="scratch-label">{label}</p>
+      <p className="scratch-label c-green2">{label}</p>
     </div>
   );
 }

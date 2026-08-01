@@ -3,6 +3,7 @@ import "./App.css";
 import Letter from "./components/Letter";
 import Message from "./components/Message";
 import ScratchCircle from "./components/ScratchCircle";
+import CountdownUntil from "./components/Countdownuntil";
 
 const REVEAL_TOTAL_MS = 10000; // durée avant de passer à la page principale
 
@@ -35,13 +36,19 @@ function App() {
       <Message visible={messageVisible} />
 
       <main className={`page ${pageVisible ? "visible" : ""}`}>
-        <section className="date-reveal-section bg-amber-100 text-black instrument-serif-regular">
-          <h2 className="instrument-serif-regular">Grattez pour découvrir la date !</h2>
+        <section>
+          <img src="images/flowerHome.png" alt="Arche en fleur" />
+        </section>
+        <section className="date-reveal-section bg-[#f2d5a9] text-black instrument-serif-regular">
+          <h2 className="instrument-serif-regular c-green2">Grattez pour découvrir la date !</h2>
           <div className="scratch-row">
             <ScratchCircle label="Jour" value="14" />
             <ScratchCircle label="Mois" value="SEPT" />
-            <ScratchCircle label="Année" value="2026" />
+            <ScratchCircle label="Année" value="2028" />
           </div>
+        </section>
+        <section>
+          <CountdownUntil />
         </section>
       </main>
     </div>
