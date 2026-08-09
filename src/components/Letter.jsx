@@ -9,7 +9,7 @@ function Letter({ isOpen, setIsOpen }) {
           <p className="mea-culpa-regular text-4xl mt-4!">Elisa & Antonin</p>
         </div>
         <img
-          src="images/letter_white.png"
+          src="images/letter_green_mobile.png"
           alt="Fleur"
           className="paper-image"
         />
