@@ -2,7 +2,6 @@
 
 :root {
   color: #2b2a33;
-  background: #f8f1ff;
   font-family: 'Inter', system-ui, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -18,7 +17,7 @@ body {
 }
 
 body {
-  background: linear-gradient(180deg, #fdfcf9 0%, #f5f2ee 28%, #ece8e3 100%);
+  background: white;
 }
 
 button,
@@ -98,10 +97,10 @@ textarea {
   color: #d15114;
 }
 .c-pink {
-  color: #d8615d;
+  color: #ed7171;
 }
 .c-pink2 {
-  color: #d43b59;
+  color: #ffd9dc;
 }
 .c-pink3 {
   color: #95042b;
@@ -113,6 +112,10 @@ textarea {
   height: 100%;
   max-height: 100%;
   max-width: 100%;
+}
+.envelope-large {
+  width: 100%;
+  max-width: 50%;
 }
 
 .envelope {
@@ -339,6 +342,7 @@ textarea {
   background: #fff;
   font-weight: 700;
   font-size: 1.3rem;
+  border: 2px solid #a2ad8d;
 }
 
 .scratch-canvas {
@@ -388,7 +392,6 @@ textarea {
 .countdown-section {
   margin: 40px 0;
   text-align: center;
-  padding: 32px 20px;
 }
 
 .countdown-section h2 {
@@ -411,14 +414,11 @@ textarea {
   min-width: 84px;
   padding: 18px 12px;
   border-radius: 20px;
-  background: #ffffffcc;
-  box-shadow: 0 12px 30px rgba(103, 56, 124, 0.1);
 }
 
 .countdown-number {
   font-size: 2.2rem;
   font-weight: 700;
-  color: #2a6036;
   line-height: 1;
   font-variant-numeric: tabular-nums; /* évite que les chiffres "sautent" en largeur */
 }

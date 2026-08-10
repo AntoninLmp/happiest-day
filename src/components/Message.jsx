@@ -4,25 +4,23 @@ function Message({ visible }) {
   const { name, plural } = useGuestName();
 
   const invites =  `${name}`;
-  const message = `vous êtes ${plural ? 'invités' : 'invité'} à célébrer notre`;
-  const story = `amour et à partager notre bonheur !`;
+  const message = `vous êtes ${plural ? 'invités' : 'invité'} à venir célébrer notre amour et à partager notre bonheur !`;
 
   const sizeInvites = invites.split(' ').length;
   const sizeMessage = message.split(' ').length;
-  const sizeStory = story.split(' ').length;
 
   // On découpe par ligne, puis par mot dans chaque ligne
   const lines = message.split('\n');
   let wordIndex = sizeInvites;
 
   return (
-    <div className={`message-overlay ${visible ? 'visible' : ''}`}>
-      <p className="message-text instrument-serif-regular-italic p-6">
+    <div className={`message-overlay ${visible ? 'visible' : ''} `}>
+      <p className="message-text instrument-serif-regular-italic w-90 p-6 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
         {invites.split(' ').map((word, i) => (
           <span
             key={i}
             className="message-word text-3xl"
-            style={{ animationDelay: `${0.8 + i * 0.35}s` }}
+            style={{ animationDelay: `${0.8 + i * 0.25}s` }}
           >
             {word}
           </span>
@@ -30,7 +28,7 @@ function Message({ visible }) {
         {lines.map((line, lineIdx) => (
           <span key={lineIdx} className="message-line">
             {line.split(' ').map((word, i) => {
-              const delay = (sizeInvites + 2) * 0.35 + wordIndex * 0.35;
+              const delay = (sizeInvites + 2) * 0.25 + wordIndex * 0.25;
               wordIndex++;
               return (
                 <span
@@ -44,7 +42,7 @@ function Message({ visible }) {
             })}
           </span>
         ))}
-        {story.split(' ').map((word, i) => (
+        {/* {story.split(' ').map((word, i) => (
           <span
             key={i}
             className="message-word mea-culpa-regular text-4xl"
@@ -52,18 +50,14 @@ function Message({ visible }) {
           >
             {word}
           </span>
-        ))}
+        ))} */}
       </p>
       <img
-          src="images/flowers_down.png"
+          src="images/Home_empty.png"
           alt="Fleur"
-          className="absolute bottom-0"
+          className="full-width-image h-full"
         />
-        <img
-          src="images/flowers_down.png"
-          alt="Fleur"
-          className="absolute top-0 rotate-180"
-        />
+        
     </div>
   );
 }

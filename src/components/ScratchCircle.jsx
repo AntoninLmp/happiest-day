@@ -92,7 +92,7 @@ function ScratchCircle({ label, value }) {
 
   return (
     <div className="scratch-circle" style={{ width: size, height: size }}>
-      <div className="scratch-value c-orange">
+      <div className="scratch-value c-green2">
         <span>{value}</span>
       </div>
       <canvas
