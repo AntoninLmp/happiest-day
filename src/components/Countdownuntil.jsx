@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const WEDDING_DATE = new Date('2028-10-07T12:00:00');
+const WEDDING_DATE = new Date('2028-10-07T00:00:00');
 
 function getTimeLeft() {
   const now = new Date();
@@ -38,26 +38,25 @@ function CountdownUntil() {
   }
   return (
     <section className="countdown-section">
-      <h2>Compte à rebours</h2>
       <div className="countdown-row">
         <div className="countdown-unit">
-          <span className="countdown-number">{timeLeft.days}</span>
+          <span className="countdown-number c-pink3">{timeLeft.days}</span>
           <span className="countdown-label">Jours</span>
         </div>
         <div className="countdown-unit">
-          <span className="countdown-number">
+          <span className="countdown-number c-pink3">
             {String(timeLeft.hours).padStart(2, "0")}
           </span>
           <span className="countdown-label">Heures</span>
         </div>
         <div className="countdown-unit">
-          <span className="countdown-number">
+          <span className="countdown-number c-pink3">
             {String(timeLeft.minutes).padStart(2, "0")}
           </span>
           <span className="countdown-label">Minutes</span>
         </div>
         <div className="countdown-unit">
-          <span className="countdown-number">
+          <span className="countdown-number c-pink3">
             {String(timeLeft.seconds).padStart(2, "0")}
           </span>
           <span className="countdown-label">Secondes</span>
