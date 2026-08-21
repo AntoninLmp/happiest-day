@@ -51,7 +51,7 @@ function App() {
           <h1 className="instrument-serif-regular c-green2">
             Nous nous marions !
           </h1>
-          <p className="instrument-serif-regular c-green2 mx-10! ">
+          <p className="instrument-serif-regular c-green2 mx-10! text-xl">
             Nous avons l'immense joie de vous annoncer notre mariage qui aura
             lieu le
             <span className="underline" id="date">

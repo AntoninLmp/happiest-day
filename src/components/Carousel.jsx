@@ -20,8 +20,8 @@ function Carousel({ items = [] }) {
   };
 
   return (
-    <div className="carousel mx-auto max-w-xl">
-      <div className="carousel-image mb-4 overflow-hidden rounded-xl border border-gray-300 h-[350px]">
+    <div className="carousel mx-auto md:max-w-1/2 max-w-xl">
+      <div className="carousel-image mb-4 overflow-hidden rounded-xl border border-gray-300 h-[350px] md:h-[500Px]">
         <img
           src={items[currentIndex].src}
           alt={items[currentIndex].alt}
@@ -33,7 +33,7 @@ function Carousel({ items = [] }) {
         <button
           type="button"
           onClick={prevItem}
-          className="rounded px-4 py-2 text-black relative top-[-200px] h-[350px]"
+          className="rounded px-4 py-2 text-black relative -top-50 h-[350px] md:h-[500Px] md:top-[-250px] "
         >
           <img src="https://cdn-icons-png.flaticon.com/512/271/271228.png" alt="Previous" className="w-4 h-4 inline-block rotate-180" />
         </button>
@@ -45,7 +45,7 @@ function Carousel({ items = [] }) {
         <button
           type="button"
           onClick={nextItem}
-          className="rounded px-4 py-2 text-black relative top-[-200px] h-[350px]"
+          className="rounded px-4 py-2 text-black relative -top-50 h-[350px] md:h-[500Px] md:top-[-250px]"
         >
           <img src="https://cdn-icons-png.flaticon.com/512/271/271228.png" alt="Next" className="w-4 h-4 inline-block" />
         </button>
