@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 
-const RADIUS = 40; // rayon du rond en px
+const RADIUS = 45; // rayon du rond en px
 const BRUSH_SIZE = 10; // rayon du pinceau en px
 const REVEAL_THRESHOLD = 0.55; // % de surface grattée avant de considérer "révélé"
 
@@ -106,7 +106,7 @@ function ScratchCircle({ label, value }) {
         onTouchMove={handleMove}
         onTouchEnd={handleEnd}
       />
-      <p className="scratch-label c-green2">{label}</p>
+      <p className="scratch-label c-green2 text-3xl">{label}</p>
     </div>
   );
 }

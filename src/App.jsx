@@ -37,9 +37,12 @@ function App() {
 
       <Message visible={messageVisible} />
 
-      <main className={`page ${pageVisible ? "visible" : ""}`}>
+      <main className={`page ${pageVisible ? "visible" : ""} w-full `}>
         <section>
-          <img src="images/Home_webbing.png" alt="Arche en fleur" />
+          <picture>
+            <source media="(min-width: 768px)" srcSet="images/Home_webbing_paysage.png" className="w-full" />
+            <img src="images/Home_webbing.png" alt="Arche en fleur" className="w-full" />
+          </picture>
         </section>
         <ScratchSection />
 
@@ -64,21 +67,15 @@ function App() {
             journée vous seront communiquées ultérieurement. <br />
           </p>
         </section>
-
-        {/* SECTION COMPTE A REBOURS */}
-        <CountdownSection />
-
         {/* SECTION Avec le lieu */}
         <PlaceSection />
 
         {/* SECTION DRESS CODE */}
         <DressCodeSection />
 
-        <section className="text-center bg-[#a2ad8d] p-4 rounded-lg">
-          <h1 className="instrument-serif-regular c-green2">
-            Informations à venir...
-          </h1>
-        </section>
+        {/* SECTION COMPTE A REBOURS */}
+        <CountdownSection />
+        
       </main>
     </div>
   );
