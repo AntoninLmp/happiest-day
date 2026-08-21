@@ -7,6 +7,10 @@ import CountdownSection from "./components/section/CountdownSection";
 import DressCodeSection from "./components/section/DressCodeSection";
 import PlaceSection from "./components/section/PlaceSection";
 
+function SectionDivider() {
+  return <div className="section-divider" aria-hidden="true" />;
+}
+
 const REVEAL_TOTAL_MS = 8500; // durée avant de passer à la page principale
 
 function App() {
@@ -48,6 +52,7 @@ function App() {
 
         <section className="text-center mb-5">
           <img src="images/polaroid2.png" alt="icon" className="mx-auto mt-5" />
+          <SectionDivider />
           <h1 className="instrument-serif-regular c-green2">
             Nous nous marions !
           </h1>
@@ -67,6 +72,7 @@ function App() {
             journée vous seront communiquées ultérieurement. <br />
           </p>
         </section>
+        <SectionDivider />
         {/* SECTION Avec le lieu */}
         <PlaceSection />
 

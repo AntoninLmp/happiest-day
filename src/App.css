@@ -202,6 +202,40 @@ textarea {
   pointer-events: auto;
 }
 
+.section-divider {
+  position: relative;
+  height: 58px;
+  background-image:
+    radial-gradient(circle at 50% 50%, #a2ad8d 0 3px, transparent 4px),
+    radial-gradient(ellipse at 43% 50%, transparent 0 5px, #a2ad8d 6px 7px, transparent 8px),
+    radial-gradient(ellipse at 57% 50%, transparent 0 5px, #a2ad8d 6px 7px, transparent 8px);
+  background-repeat: no-repeat;
+}
+
+.section-divider::before,
+.section-divider::after {
+  position: absolute;
+  top: 50%;
+  content: "";
+  width: calc(50% - 34px);
+  height: 1px;
+  background: #a2ad8d;
+}
+
+.section-divider::before {
+  left: 0;
+}
+
+.section-divider::after {
+  right: 0;
+}
+
+@media (max-width: 480px) {
+  .section-divider {
+    height: 44px;
+  }
+}
+
 .hero-section {
   min-height: 60vh;
   display: grid;
