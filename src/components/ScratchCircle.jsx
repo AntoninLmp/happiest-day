@@ -1,8 +1,9 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
+import confetti from 'canvas-confetti';
 
 const RADIUS = 45; // rayon du rond en px
 const BRUSH_SIZE = 10; // rayon du pinceau en px
-const REVEAL_THRESHOLD = 0.55; // % de surface grattée avant de considérer "révélé"
+const REVEAL_THRESHOLD = 0.45; // % de surface grattée avant de considérer "révélé"
 
 function ScratchCircle({ label, value }) {
   const canvasRef = useRef(null);
@@ -10,6 +11,33 @@ function ScratchCircle({ label, value }) {
   const [revealed, setRevealed] = useState(false);
 
   const size = RADIUS * 2;
+
+  // Lancement des confettis personnalisés
+  const triggerConfetti = useCallback(() => {
+    const end = Date.now() + 4 * 1000; // 15 secondes
+    const colors = ["#e59564", "#a2ad8d","#eeb9b9"];
+
+    (function frame() {
+      confetti({
+        particleCount: 3,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0, y: 0.4 },
+        colors,
+      });
+      confetti({
+        particleCount: 3,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1, y: 0.4 },
+        colors,
+      });
+
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
+  }, []);
 
   const drawCover = useCallback((ctx) => {
     ctx.clearRect(0, 0, size, size);
@@ -31,11 +59,19 @@ function ScratchCircle({ label, value }) {
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     canvas.width = size;
     canvas.height = size;
     drawCover(ctx);
   }, [drawCover, size]);
+
+  // Écouteur de changement d'état "revealed"
+  useEffect(() => {
+    if (revealed) {
+      triggerConfetti();
+    }
+  }, [revealed, triggerConfetti]);
 
   const getPos = (e) => {
     const rect = canvasRef.current.getBoundingClientRect();
@@ -57,28 +93,31 @@ function ScratchCircle({ label, value }) {
 
   const checkRevealPercentage = () => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const { data } = ctx.getImageData(0, 0, size, size);
     let transparent = 0;
     let total = 0;
+
     for (let i = 3; i < data.length; i += 4) {
-      // On ne compte que les pixels dans le cercle (approximation via alpha du fond)
       total++;
       if (data[i] === 0) transparent++;
     }
-    if (transparent / total > REVEAL_THRESHOLD) {
+
+    if (!revealed && transparent / total > REVEAL_THRESHOLD) {
       setRevealed(true);
     }
   };
 
   const handleStart = (e) => {
+    if (revealed) return;
     isDrawing.current = true;
     const { x, y } = getPos(e);
     scratchAt(x, y);
   };
 
   const handleMove = (e) => {
-    if (!isDrawing.current) return;
+    if (!isDrawing.current || revealed) return;
     e.preventDefault();
     const { x, y } = getPos(e);
     scratchAt(x, y);
