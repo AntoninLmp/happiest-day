@@ -44,7 +44,7 @@ function App() {
       <main className={`page ${pageVisible ? "visible" : ""} w-full `}>
         <section>
           <picture>
-            <source media="(min-width: 768px)" srcSet="images/Home_webbing_paysage.png" className="w-full" />
+            <source media="(min-width: 768px)" srcSet="images/Home_webbing_paysage2.png" className="w-full" />
             <img src="images/Home_webbing.png" alt="Arche en fleur" className="w-full" />
           </picture>
         </section>
@@ -58,29 +58,27 @@ function App() {
           </h1>
           <p className="instrument-serif-regular c-green2 mx-10! text-xl">
             Nous avons l'immense joie de vous annoncer notre mariage qui aura
-            lieu le
-            <span className="underline" id="date">
-              {" "}
-              7 octobre 2028
-            </span>
-            . <br />
-            Nous vous invitons à célébrer ce moment unique avec nous. <br />
+            lieu le <span className="underline" id="date"> 7 octobre 2028</span> . <br />
+            Nous vous invitons à célébrer ce moment unique avec nous. <br /><br />
+
             Le "Save the date" est une invitation à réserver cette date dans vos
-            agendas pour partager ce{" "}
-            <span className=" italic">jour exceptionnel</span>. <br />
-            Les informations complémentaires concernant le programme de la
-            journée vous seront communiquées ultérieurement. <br />
+            agendas pour partager ce  <span className=" italic">jour exceptionnel</span>. <br />
+            Les informations complémentaires concernant le programme de la journée vous seront communiquées ultérieurement. <br /><br />
+
+            Ce site a été réalisé par Antonin et désigné par Elisa. 
           </p>
         </section>
         <SectionDivider />
         {/* SECTION Avec le lieu */}
         <PlaceSection />
 
+        <SectionDivider />
         {/* SECTION DRESS CODE */}
         <DressCodeSection />
 
         {/* SECTION COMPTE A REBOURS */}
         <CountdownSection />
+
         
       </main>
     </div>

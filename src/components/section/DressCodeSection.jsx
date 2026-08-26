@@ -9,7 +9,7 @@ function DressCodeSection() {
               />
             <h1 className="instrument-serif-regular c-green2">Dress Code</h1>
           </div>
-          <img src="images/dresscode2.png" alt="" className="mx-auto!" />
+          <img src="images/dresscode2.png" alt="" className="mx-auto! md:w-1/3" />
           <div>
             <h2 className="instrument-serif-regular c-pink bg-[#ffd9dc] text-center p-2 my-3! mx-auto! w-max rounded-2xl">
               Tenues Colorées
