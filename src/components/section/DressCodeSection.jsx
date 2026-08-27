@@ -19,11 +19,11 @@ function DressCodeSection() {
               
             </p>
             <div className="h-15 flex items-center justify-center gap-4 mt-3">
-              <button className="w-8 h-8 bg-[#837f28] rounded-2xl"></button>
-              <button className="w-8 h-8 bg-[#ed7171] rounded-2xl"></button>
-              <button className="w-8 h-8 bg-[#fce56b] rounded-2xl"></button>
-              <button className="w-8 h-8 bg-[#ee6e04] rounded-2xl"></button>
-              <button className="w-8 h-8 bg-[#7a236c] rounded-2xl"></button>
+              <button className="w-10 h-10 bg-[#837f28] rounded-xl"></button>
+              <button className="w-10 h-10 bg-[#ed7171] rounded-xl"></button>
+              <button className="w-10 h-10 bg-[#fce56b] rounded-xl"></button>
+              <button className="w-10 h-10 bg-[#ee6e04] rounded-xl"></button>
+              <button className="w-10 h-10 bg-[#7a236c] rounded-xl"></button>
             </div>
           </div>
         </section>

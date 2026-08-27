@@ -31,7 +31,7 @@ function PlaceSection() {
           </p>
           <Carousel items={carouselItems} />
           <div className="mt-3">
-            <button className="border-1 border-[#555b39] rounded p-2 bg-[#898c79] text-white">
+            <button className="border border-[#555b39] rounded p-2 bg-[#898c79] text-white">
               <a href="https://maps.app.goo.gl/cN2snQF4B1fs63Kw9" target="_blank" rel="noopener noreferrer">
                 Voir sur Google Maps
               </a>

@@ -13,12 +13,10 @@ function CountdownSection() {
         </div>
         <CountdownUntil />
         <div className="text-center p-4">
-          <h1 className="instrument-serif-regular c-pink3">
+          <p className="instrument-serif-regular c-pink3 text-3xl">
             Plein d'informations à venir... <br />
-          </h1>
-          <h1 className="instrument-serif-regular c-pink3">
             On vous tiens au courant !
-          </h1>
+          </p>
         </div>
       </section>
     );
