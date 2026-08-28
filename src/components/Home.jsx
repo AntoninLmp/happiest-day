@@ -42,19 +42,15 @@ function Home() {
 
       <Message visible={messageVisible} />
 
-      <main className={`page ${pageVisible ? "visible" : ""} w-full `}>
+      <main className={`page ${pageVisible ? "visible" : ""} w-full`}>
         <section>
-          {/* <picture>
-            <source media="(min-width: 768px)" srcSet="images/Home_webbing_paysage2.png" className="w-full" />
-            <img src="images/Home_webbing.png" alt="Arche en fleur" className="w-full" />
-          </picture> */}
           <picture>
             <source
               media="(min-width: 768px)"
-              srcSet="images/kids_english_paysage.png"
+              srcSet="images/kids_pink_paysage.png"
               className="w-full"
             />
-            <img src="images/kids_english.png" alt="Fleur" className="" />
+            <img src="images/kids_pink.png" alt="Fleur" className="m-auto" />
           </picture>
         </section>
         <ScratchSection />
@@ -86,7 +82,7 @@ function Home() {
           <Link to="/histoire">
             <button
               type="button"
-              className="bg-[#a2ad8d] instrument-serif-regular p-2 rounded mt-3"
+              className="bg-[#a2ad8d] instrument-serif-regular p-2 rounded mt-3 btn-classic"
             >
               Découvrir notre histoire
             </button>

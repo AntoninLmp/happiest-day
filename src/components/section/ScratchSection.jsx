@@ -2,8 +2,8 @@ import ScratchCircle from "../ScratchCircle";
 
 function ScratchSection() {
     return (
-        <section className="date-reveal-section bg-[#a2ad8d] text-black instrument-serif-regular">
-          <h2 className="instrument-serif-regular c-green2">
+        <section className="date-reveal-section bg-[#ffd6d6] text-black instrument-serif-regular">
+          <h2 className="instrument-serif-regular bold c-pink3">
             Grattez pour découvrir la date !
           </h2>
           <div className="scratch-row">
