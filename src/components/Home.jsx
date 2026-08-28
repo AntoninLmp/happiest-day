@@ -59,7 +59,7 @@ function Home() {
         </section>
         <ScratchSection />
 
-        <section className="text-center mb-5">
+        <section className="text-center mb-5 ">
           <img src="images/polaroid2.png" alt="icon" className="mx-auto mt-5" />
           <SectionDivider />
           <h1 className="instrument-serif-regular c-green2">
@@ -73,16 +73,15 @@ function Home() {
               7 octobre 2028
             </span>
             , entourés de ceux qui comptent le plus pour nous, nous nous dirons
-            oui.
+            oui pour la vie.
             <br />
             <br />
             Le "Save the date" est une invitation à réserver cette date dans vos
             agendas pour partager ce{" "}
-            <span className=" italic">jour exceptionnel</span>. 🌿 <br />
+            <span className=" italic">jour exceptionnel</span> avec nous. 🌿 <br />
             Le programme complet de la journée vous parviendra un peu plus tard.
             En attendant, on vous laisse savourer la nouvelle avec nous. <br />
-            Ce petit coin du web a été codé par Antonin, et habillé de fleurs
-            par Elisa.
+            PS: Ce site web a été codé par Antonin, et désigné par son acolyte, Elisa.
           </p>
           <Link to="/histoire">
             <button
