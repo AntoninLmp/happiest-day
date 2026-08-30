@@ -1,6 +1,6 @@
 function DressCodeSection() {
     return (
-        <section className="bg-white mb-10">
+        <section className="mb-10">
           <div className="flex items-center justify-center pb-2 pt-5">
             <img
                 src="https://cdn-icons-png.flaticon.com/512/3085/3085472.png"

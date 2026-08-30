@@ -8,7 +8,8 @@ export default function App (){
   return (
     <BrowserRouter basename='happiest-day'>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home isLetter={true}/>} />
+          <Route path="/home" element={<Home isLetter={false} />} />
           <Route path="/histoire" element={<LoveStory />} />
         </Routes>
     </BrowserRouter>
