@@ -7,6 +7,7 @@ import CountdownSection from "./section/CountdownSection";
 import DressCodeSection from "./section/DressCodeSection";
 import PlaceSection from "./section/PlaceSection";
 import { Link } from "react-router-dom";
+import GlassNavBar from "./section/GlassNavBar";
 
 function SectionDivider() {
   return <div className="section-divider" aria-hidden="true" />;
@@ -14,8 +15,8 @@ function SectionDivider() {
 
 const REVEAL_TOTAL_MS = 8500; // durée avant de passer à la page principale
 
-function Home() {
-  const [stage, setStage] = useState("closed"); // 'closed' | 'message' | 'open'
+function Home({isLetter}) {
+  const [stage, setStage] = useState( !isLetter ? "open" : "closed"); // 'closed' | 'message' | 'open'
 
   const envelopeOpen = stage !== "closed";
   const messageVisible = stage === "message";
@@ -38,9 +39,12 @@ function Home() {
 
   return (
     <div className="app">
-      <Letter isOpen={envelopeOpen} setIsOpen={handleOpenEnvelope} />
-
-      <Message visible={messageVisible} />
+      {isLetter && (
+        <>
+          <Letter isOpen={envelopeOpen} setIsOpen={handleOpenEnvelope} />
+          <Message visible={messageVisible} />
+        </>
+      )}
 
       <main className={`page ${pageVisible ? "visible" : ""} w-full`}>
         <section>
@@ -74,10 +78,12 @@ function Home() {
             <br />
             Le "Save the date" est une invitation à réserver cette date dans vos
             agendas pour partager ce{" "}
-            <span className=" italic">jour exceptionnel</span> avec nous. 🌿 <br />
+            <span className=" italic">jour exceptionnel</span> avec nous. 🌿{" "}
+            <br />
             Le programme complet de la journée vous parviendra un peu plus tard.
             En attendant, on vous laisse savourer la nouvelle avec nous. <br />
-            PS: Ce site web a été codé par Antonin, et désigné par son acolyte, Elisa.
+            PS: Ce site web a été codé par Antonin, et désigné par son acolyte,
+            Elisa.
           </p>
           <Link to="/histoire">
             <button
@@ -98,6 +104,7 @@ function Home() {
 
         {/* SECTION COMPTE A REBOURS */}
         <CountdownSection />
+        <GlassNavBar />
       </main>
     </div>
   );
