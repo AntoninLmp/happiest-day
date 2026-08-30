@@ -1,15 +1,15 @@
 import { useState } from "react";
-import { Home, Search, Heart, User } from "lucide-react";
+import { Home, Search, Heart, User, Mails, Info } from "lucide-react";
 import { Link } from "react-router-dom";
 
 // Barre de navigation translucide (effet "glassmorphism") façon Instagram,
 // à placer en bas de l'écran. 4 catégories, entièrement personnalisables.
 
 const DEFAULT_ITEMS = [
-  { id: "home", label: "Accueil", icon: Home, road: "/home" },
-  { id: "search", label: "Recherche", icon: Search, road: "/histoire" },
-  { id: "likes", label: "Favoris", icon: Heart, road: "/" },
-  { id: "profile", label: "Profil", icon: User, road: "/" },
+  { id: "home", label: "Invitation", icon: Home, road: "/home" },
+  { id: "search", label: "Histoire", icon: Heart, road: "/histoire" },
+  { id: "likes", label: "Programme", icon: Info, road: "/" },
+  { id: "profile", label: "Confirmation", icon: Mails, road: "/" },
 ];
 
 export default function GlassNavBar({ items = DEFAULT_ITEMS, onChange }) {
@@ -23,8 +23,8 @@ export default function GlassNavBar({ items = DEFAULT_ITEMS, onChange }) {
   return (
     <div className="sticky bottom-0 left-0 right-0 z-50 flex justify-center pb-4 px-4 pointer-events-none">
       <nav
-        className="pointer-events-auto flex items-center gap-1 px-2 py-2 rounded-full
-                   bg-white/20 backdrop-blur-xl backdrop-saturate-150
+        className="pointer-events-auto flex items-center gap-1 px-2 py-2 rounded-full bg-[#898c79]
+                   backdrop-blur-xl backdrop-saturate-150
                    border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.15)]"
       >
         {items.map(({ id, label, icon: Icon, road }) => {
