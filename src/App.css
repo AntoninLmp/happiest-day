@@ -359,7 +359,7 @@ textarea {
 /* DATE REVEAL ANIMATION */
 .date-reveal-section {
   text-align: center;
-  padding: 40px 20px;
+  padding: 40px 20px 55px 20px;
 }
 
 .date-reveal-section h2 {
@@ -388,7 +388,6 @@ textarea {
   border-radius: 50%;
   background: #fff;
   font-weight: 700;
-  font-size: 1.3rem;
   border: 2px solid #ed7171;
 }
 
@@ -408,11 +407,10 @@ textarea {
 
 .scratch-label {
   position: absolute;
-  bottom: -26px;
+  bottom: -42px;
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 0.85rem;
   margin: 0;
 }
 

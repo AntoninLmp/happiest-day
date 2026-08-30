@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState, useCallback } from 'react';
 import confetti from 'canvas-confetti';
 
-const RADIUS = 45; // rayon du rond en px
+const RADIUS = window.innerWidth < 550 ? 45 : 70; // rayon du rond en px
 const BRUSH_SIZE = 10; // rayon du pinceau en px
 const REVEAL_THRESHOLD = 0.45; // % de surface grattée avant de considérer "révélé"
 
@@ -131,7 +131,7 @@ function ScratchCircle({ label, value }) {
 
   return (
     <div className="scratch-circle" style={{ width: size, height: size }}>
-      <div className="scratch-value c-pink3">
+      <div className="scratch-value c-pink3 text-3xl">
         <span>{value}</span>
       </div>
       <canvas
@@ -145,7 +145,7 @@ function ScratchCircle({ label, value }) {
         onTouchMove={handleMove}
         onTouchEnd={handleEnd}
       />
-      <p className="scratch-label c-pink3 text-3xl">{label}</p>
+      <p className="scratch-label c-pink3 uppercase sm:text-3xl text-xl">{label}</p>
     </div>
   );
 }

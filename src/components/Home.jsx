@@ -47,7 +47,7 @@ function Home({isLetter}) {
       )}
 
       <main className={`page ${pageVisible ? "visible" : ""} w-full`}>
-        <section>
+        <section className="bg-[#ffd6d6]">
           <picture>
             <source
               media="(min-width: 768px)"
