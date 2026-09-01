@@ -145,7 +145,7 @@ function ScratchCircle({ label, value }) {
         onTouchMove={handleMove}
         onTouchEnd={handleEnd}
       />
-      <p className="scratch-label c-pink3 uppercase sm:text-3xl text-xl">{label}</p>
+      <p className="scratch-label c-pink3 uppercase sm:text-2xl text-xl">{label}</p>
     </div>
   );
 }
