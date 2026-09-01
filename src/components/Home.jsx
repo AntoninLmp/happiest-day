@@ -8,6 +8,7 @@ import DressCodeSection from "./section/DressCodeSection";
 import PlaceSection from "./section/PlaceSection";
 import { Link } from "react-router-dom";
 import GlassNavBar from "./section/GlassNavBar";
+import Photomaton from "./section/Photomaton";
 
 function SectionDivider() {
   return <div className="section-divider" aria-hidden="true" />;
@@ -60,8 +61,7 @@ function Home({isLetter}) {
         <ScratchSection />
 
         <section className="text-center mb-5 ">
-          <img src="images/polaroid2.png" alt="icon" className="mx-auto mt-5" />
-          <SectionDivider />
+          {/* <img src="images/polaroid2.png" alt="icon" className="mx-auto mt-5" /> */}
           <h1 className="instrument-serif-regular c-green2">
             Nous nous marions !
           </h1>
@@ -85,26 +85,32 @@ function Home({isLetter}) {
             PS: Ce site web a été codé par Antonin, et désigné par son acolyte,
             Elisa.
           </p>
-          <Link to="/histoire">
+          <img
+            src="./images/flowers.png"
+            alt="polaroid"
+            className="mx-auto "
+          />
+          {/* <Link to="/histoire">
             <button
               type="button"
               className="bg-[#a2ad8d] instrument-serif-regular p-2 rounded mt-3 btn-classic"
             >
               Découvrir notre histoire
             </button>
-          </Link>
+          </Link> */}
         </section>
-        <SectionDivider />
         {/* SECTION Avec le lieu */}
-        <PlaceSection />
-
+        <SectionDivider />
+          <PlaceSection />
+        <SectionDivider />
+          <Photomaton />
         <SectionDivider />
         {/* SECTION DRESS CODE */}
         <DressCodeSection />
 
         {/* SECTION COMPTE A REBOURS */}
         <CountdownSection />
-        <GlassNavBar />
+        <GlassNavBar index={0}/>
       </main>
     </div>
   );
