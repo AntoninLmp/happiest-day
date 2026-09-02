@@ -1,16 +1,15 @@
-import { useGuestName } from '../hooks/useGuestName';
+import { useGuestName } from "../hooks/useGuestName";
 
 function Message({ visible }) {
   const { name, plural } = useGuestName();
 
-  const invites =  `${name}`;
-  const message = `vous êtes ${plural ? 'invités' : 'invité'} à venir célébrer notre amour et à partager notre bonheur !`;
+  const invites = `${name}`;
+  const message = `vous êtes ${plural ? "invités" : "invité"} à venir célébrer notre amour et à partager notre bonheur !`;
 
-  const sizeInvites = invites.split(' ').length;
-  const sizeMessage = message.split(' ').length;
+  const sizeInvites = invites.split(" ").length;
 
   // On découpe par ligne, puis par mot dans chaque ligne
-  const lines = message.split('\n');
+  const lines = message.split("\n");
   let wordIndex = sizeInvites;
 
   return (
@@ -41,20 +40,12 @@ function Message({ visible }) {
               );
             })}
           </span>
-        ))} 
+        ))}
       </p>
-      <picture className="w-full h-full">
-        <source
-          media="(min-width: 768px)"
-          srcSet="images/message_bg_paysage.jpg"
-          className="absolute bottom-0 left-0 w-full"
-        />
-        <img
-          src="images/message_bg.png"
-          alt="Fleur"
-          className="absolute bottom-0 left-0 w-full h-full"
-        />
-      </picture>
+      <img
+        src="images/message_bg_paysage.jpg"
+        className="absolute bottom-0 left-0 w-full sm:h-auto h-[80%]"
+      />
     </div>
   );
 }

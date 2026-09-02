@@ -1,12 +1,10 @@
+import { Shirt } from "lucide-react";
+
 function DressCodeSection() {
     return (
-        <section className="bg-white mb-10">
+        <section className="mb-10">
           <div className="flex items-center justify-center pb-2 pt-5">
-            <img
-                src="https://cdn-icons-png.flaticon.com/512/3085/3085472.png"
-                alt="icon"
-                className="w-6 h-6 inline-block mr-2"
-              />
+            <Shirt size={19} strokeWidth={1.8} className="inline-block mr-2" />
             <h1 className="instrument-serif-regular c-green2">Dress Code</h1>
           </div>
           <img src="images/dresscode2.png" alt="" className="mx-auto! md:w-1/3" />
