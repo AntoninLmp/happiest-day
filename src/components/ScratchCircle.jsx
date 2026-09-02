@@ -5,7 +5,7 @@ const RADIUS = window.innerWidth < 550 ? 45 : 70; // rayon du rond en px
 const BRUSH_SIZE = 10; // rayon du pinceau en px
 const REVEAL_THRESHOLD = 0.45; // % de surface grattée avant de considérer "révélé"
 
-function ScratchCircle({ label, value }) {
+function ScratchCircle({ label, value, onReveal }) {
   const canvasRef = useRef(null);
   const isDrawing = useRef(false);
   const [revealed, setRevealed] = useState(false);
@@ -70,8 +70,9 @@ function ScratchCircle({ label, value }) {
   useEffect(() => {
     if (revealed) {
       triggerConfetti();
+      onReveal();
     }
-  }, [revealed, triggerConfetti]);
+  }, [revealed, triggerConfetti, onReveal]);
 
   const getPos = (e) => {
     const rect = canvasRef.current.getBoundingClientRect();

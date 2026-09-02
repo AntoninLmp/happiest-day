@@ -17,11 +17,16 @@ function SectionDivider() {
 const REVEAL_TOTAL_MS = 8500; // durée avant de passer à la page principale
 
 function Home({isLetter}) {
+  const [revealedCount, setRevealedCount] = useState(0);
   const [stage, setStage] = useState( !isLetter ? "open" : "closed"); // 'closed' | 'message' | 'open'
 
   const envelopeOpen = stage !== "closed";
   const messageVisible = stage === "message";
   const pageVisible = stage === "open";
+
+  const handleReveal = () => {
+    setRevealedCount((prevCount) => prevCount + 1);
+  };
 
   useEffect(() => {
     document.body.style.overflow = pageVisible ? "auto" : "hidden";
@@ -68,7 +73,7 @@ function Home({isLetter}) {
           <p className="instrument-serif-regular c-green2 mx-10! text-xl">
             Nous avons l'immense joie de vous annoncer notre mariage. <br />
             Le{" "}
-            <span className="underline" id="date">
+            <span className="underline" id="date" style={{ filter: "blur(5px)" }}>
               {" "}
               7 octobre 2028
             </span>
