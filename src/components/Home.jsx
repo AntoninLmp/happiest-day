@@ -95,23 +95,14 @@ function Home({isLetter}) {
             alt="polaroid"
             className="mx-auto "
           />
-          {/* <Link to="/histoire">
-            <button
-              type="button"
-              className="bg-[#a2ad8d] instrument-serif-regular p-2 rounded mt-3 btn-classic"
-            >
-              Découvrir notre histoire
-            </button>
-          </Link> */}
         </section>
         {/* SECTION Avec le lieu */}
         <SectionDivider />
           <PlaceSection />
         <SectionDivider />
           <Photomaton />
-        <SectionDivider />
         {/* SECTION DRESS CODE */}
-        <DressCodeSection />
+        {/* <DressCodeSection /> */}
 
         {/* SECTION COMPTE A REBOURS */}
         <CountdownSection />

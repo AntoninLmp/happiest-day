@@ -8,11 +8,15 @@ import { Link } from "react-router-dom";
 const DEFAULT_ITEMS = [
   { id: "home", label: "Invitation", icon: Home, road: "/home" },
   { id: "search", label: "Histoire", icon: Heart, road: "/histoire" },
-  { id: "likes", label: "Programme", icon: Info, road: "/programme" },
-  { id: "profile", label: "Confirmation", icon: Mails, road: "/" },
+  { id: "likes", label: "Informations", icon: Info, road: "/informations" },
+  { id: "profile", label: "Confirmation", icon: Mails, road: "/confirmation" },
 ];
 
-export default function GlassNavBar({ items = DEFAULT_ITEMS, onChange, index }) {
+export default function GlassNavBar({
+  items = DEFAULT_ITEMS,
+  onChange,
+  index,
+}) {
   const [active, setActive] = useState(items[index].id);
 
   const handleClick = (id) => {
@@ -58,10 +62,6 @@ export default function GlassNavBar({ items = DEFAULT_ITEMS, onChange, index }) 
                 >
                   {label}
                 </span>
-
-                {/* {isActive && (
-                  <span className="absolute -bottom-1 w-1.5 h-1.5 rounded-full bg-white" />
-                )} */}
               </button>
             </Link>
           );

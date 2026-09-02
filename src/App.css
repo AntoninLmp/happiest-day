@@ -117,6 +117,199 @@ textarea {
   color: #982229;
 }
 
+.programme-coming-soon {
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(85, 91, 57, 0.2);
+  border-radius: 8px;
+  background:
+    #e8eadf;
+  box-shadow: inset 0 0 35px rgba(85, 91, 57, 0.06);
+}
+
+.programme-coming-soon__content {
+  z-index: 1;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.programme-coming-soon__eyebrow {
+  color: #982229;
+  font-family: "Instrument Serif", serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.programme-coming-soon__line {
+  display: block;
+  width: 44px;
+  height: 1px;
+  margin: 14px auto 18px;
+  background: #982229;
+}
+
+.programme-coming-soon h2 {
+  margin-bottom: 8px;
+}
+
+.programme-coming-soon p {
+  max-width: 280px;
+  margin: 0 auto;
+  line-height: 1.25;
+}
+
+.confirmation-page {
+  min-height: 100vh;
+}
+
+.confirmation-header {
+  padding: 0 24px 24px;
+  text-align: center;
+}
+
+.confirmation-header h1 {
+  margin: 10px 0 8px;
+}
+
+.confirmation-header p {
+  max-width: 300px;
+  margin: 0 auto;
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+
+.confirmation-eyebrow {
+  color: #982229;
+  font-family: "Instrument Serif", serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.confirmation-card {
+  max-width: 560px;
+  margin: 0 auto;
+  border: 1px solid rgba(85, 91, 57, 0.2);
+  border-radius: 8px;
+  background: #e8eadf;
+  box-shadow: 0 10px 28px rgba(85, 91, 57, 0.08);
+  overflow: hidden;
+}
+
+.confirmation-card__topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  color: #555b39;
+  font-family: "Instrument Serif", serif;
+  font-size: 0.95rem;
+  border-bottom: 1px solid rgba(85, 91, 57, 0.15);
+}
+
+.confirmation-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ed7171;
+}
+
+.confirmation-form-wrap {
+  position: relative;
+  min-height: 390px;
+}
+
+.confirmation-form {
+  padding: 24px;
+  opacity: 0.45;
+}
+
+.confirmation-form fieldset {
+  display: grid;
+  gap: 8px;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.confirmation-form legend {
+  margin-bottom: 12px;
+  color: #555b39;
+  font-size: 1.6rem;
+}
+
+.confirmation-form label {
+  margin-top: 8px;
+  color: #555b39;
+  font-family: "Instrument Serif", serif;
+}
+
+.confirmation-form select,
+.confirmation-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid rgba(85, 91, 57, 0.28);
+  border-radius: 4px;
+  color: #555b39;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.confirmation-form button {
+  margin-top: 12px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 4px;
+  color: white;
+  background: #555b39;
+}
+
+.confirmation-lock {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  gap: 8px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(232, 234, 223, 0.7);
+  backdrop-filter: blur(3px);
+}
+
+.confirmation-lock__icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  margin: 0 auto 4px;
+  border-radius: 50%;
+  color: #982229;
+  background: #ffd9dc;
+}
+
+.confirmation-lock strong {
+  color: #555b39;
+  font-size: 1.45rem;
+}
+
+.confirmation-lock p {
+  max-width: 260px;
+  margin: 0 auto;
+  color: #555b39;
+  line-height: 1.25;
+}
+
+@media (max-width: 600px) {
+  .confirmation-card {
+    margin: 0 20px;
+  }
+}
+
+
 .envelope-wrapper {
   position: relative;
   width: 50%;
