@@ -50,9 +50,9 @@ const Photomaton = () => {
       <div className="mx-10">
         <h1 className="instrument-serif-regular c-green2">Le photomaton !</h1>
         <p className="instrument-serif-regular c-green2 mb-5! text-xl">
-          Découvrez des petits bout de notre histoire à travers ce photomaton. <br />
-          Cliquer sur la manivelle pour lancer l'impression des photos, puis 
-          recommencez autant de fois que vous le souhaitez pour découvrir d'autres souvenirs. <br />
+          Découvrez des petits bout de notre histoire à travers ce photomaton. Si vous connaissez bien Elisa, elle adore photographier et filmer les moments devie. C'est donc un petit clin d'œil à sa passion. <br />
+          Cliquez sur la manivelle pour lancer l'impression des photos, puis attendez qu'elle remonte pour 
+          recommencer et découvrir d'autres souvenirs. <br />
           Amusez-vous bien ! 🌿
         </p>
       </div>

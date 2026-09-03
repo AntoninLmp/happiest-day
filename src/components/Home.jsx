@@ -83,7 +83,7 @@ function Home({isLetter}) {
             <br />
             Le "Save the date" est une invitation à réserver cette date dans vos
             agendas pour partager ce{" "}
-            <span className=" italic">jour exceptionnel</span> avec nous. 🌿{" "}
+            <span className=" italic">jour exceptionnel</span> avec nous.
             <br />
             Le programme complet de la journée vous parviendra un peu plus tard.
             En attendant, on vous laisse savourer la nouvelle avec nous. <br />
@@ -93,7 +93,7 @@ function Home({isLetter}) {
           <img
             src="./images/flowers.png"
             alt="polaroid"
-            className="mx-auto "
+            className="mx-auto w-90"
           />
         </section>
         {/* SECTION Avec le lieu */}
@@ -106,7 +106,7 @@ function Home({isLetter}) {
 
         {/* SECTION COMPTE A REBOURS */}
         <CountdownSection />
-        <GlassNavBar index={0}/>
+        <GlassNavBar index={0} bgColors="bg-[#fee2e5]" />
       </main>
     </div>
   );

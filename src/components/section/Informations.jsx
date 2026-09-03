@@ -1,5 +1,4 @@
 import GlassNavBar from "./GlassNavBar";
-import Photomaton from "./Photomaton";
 import DressCodeSection from "./DressCodeSection";
 import { LockKeyhole, Notebook, MapPin, Utensils } from "lucide-react";
 
@@ -15,7 +14,7 @@ export default function Informations() {
         </h1>
       </div>
       <section>
-        <div className="programme-coming-soon mx-5" aria-live="polite">
+        <div className="programme-coming-soon mx-5 md:mx-[20%]" aria-live="polite">
           <div className="programme-coming-soon__content">
             <span className="programme-coming-soon__eyebrow">Le programme</span>
             <span
@@ -42,7 +41,7 @@ export default function Informations() {
         </h1>
       </div>
       <section>
-        <div className="programme-coming-soon mx-5" aria-live="polite">
+        <div className="programme-coming-soon mx-5 md:mx-[20%]" aria-live="polite">
           <div className="programme-coming-soon__content">
             <span className="confirmation-lock__icon" aria-hidden="true">
               <LockKeyhole size={19} strokeWidth={1.8} />
@@ -51,7 +50,7 @@ export default function Informations() {
               On ne révèle pas encore le lieu...
             </h2>
             <p className="instrument-serif-regular c-green2">
-              On en sait rien de toute façon.
+              On n'en sait rien de toute façon.
             </p>
           </div>
         </div>
@@ -64,13 +63,13 @@ export default function Informations() {
         </h1>
       </div>
       <section>
-        <div className="programme-coming-soon mx-5" aria-live="polite">
+        <div className="programme-coming-soon mx-5 md:mx-[20%] mb-10" aria-live="polite">
           <div className="programme-coming-soon__content">
             <span className="confirmation-lock__icon" aria-hidden="true">
               <LockKeyhole size={19} strokeWidth={1.8} />
             </span>
             <h2 className="instrument-serif-regular c-green2">
-              C'est la qu'on reconnaît les gourmands  ...
+              C'est là qu'on reconnaît les gourmands  ...
             </h2>
             <p className="instrument-serif-regular c-green2">
               Le marié a déjà hâte de manger aussi !

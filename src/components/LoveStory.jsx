@@ -29,14 +29,14 @@ import GlassNavBar from "./section/GlassNavBar";
    ========================================================================= */
 
 const COLORS = {
-  paper: "#F5F3EA",
-  ink: "#2B1620",
-  inkSoft: "#4A2F3B",
+  paper: "#fffdf9",
+  ink: "#555b39",
+  inkSoft: "#555b39",
   sauge: "#a2ad8d",
   saugeD: "#6E7A5D",
   blush: "#ffd9dc",
-  wine: "#95042b",
-  cream: "#FBF0E9",
+  wine: "#982229",
+  cream: "#fffdf9",
 };
 
 /* =========================================================================
@@ -121,7 +121,7 @@ function Eyebrow({ children }) {
   return (
     <div
       style={{
-        fontFamily: "'Work Sans', sans-serif",
+        fontFamily: "'Instrument Serif', serif",
         fontSize: "0.74rem",
         fontWeight: 600,
         letterSpacing: "0.14em",
@@ -163,8 +163,8 @@ const sectionStyle = {
 const narrowWrap = { maxWidth: 620, margin: "0 auto", textAlign: "center" };
 
 const chapterTitleStyle = {
-  fontFamily: "'Fraunces', serif",
-  fontWeight: 600,
+  fontFamily: "'Instrument Serif', serif",
+  fontWeight: 400,
   fontSize: "clamp(1.6rem, 4vw, 2.3rem)",
   color: COLORS.ink,
   margin: "0 0 .6rem",
@@ -172,14 +172,14 @@ const chapterTitleStyle = {
 };
 
 const bodyTextStyle = {
-  fontFamily: "'Work Sans', sans-serif",
-  fontSize: "1rem",
-  lineHeight: 1.65,
+  fontFamily: "'Instrument Serif', serif",
+  fontSize: "1.1rem",
+  lineHeight: 1.45,
   color: COLORS.inkSoft,
 };
 
 const capStyle = {
-  fontFamily: "'Work Sans', sans-serif",
+  fontFamily: "'Instrument Serif', serif",
   fontSize: ".82rem",
   color: COLORS.saugeD,
 };
@@ -188,9 +188,9 @@ const primaryBtnStyle = {
   background: COLORS.wine,
   color: COLORS.cream,
   border: "none",
-  borderRadius: 999,
+  borderRadius: 4,
   padding: ".6rem 1.4rem",
-  fontFamily: "'Work Sans', sans-serif",
+  fontFamily: "'Instrument Serif', serif",
   fontWeight: 600,
   fontSize: ".88rem",
   cursor: "pointer",
@@ -202,9 +202,9 @@ const resetBtnStyle = {
   background: "transparent",
   border: `1px solid ${COLORS.saugeD}`,
   color: COLORS.saugeD,
-  borderRadius: 999,
+  borderRadius: 4,
   padding: ".35rem .9rem",
-  fontFamily: "'Work Sans', sans-serif",
+  fontFamily: "'Instrument Serif', serif",
   fontSize: ".76rem",
   cursor: "pointer",
 };
@@ -213,79 +213,211 @@ const resetBtnStyle = {
    JEU 1 — Chapitre I : relier les chemins (rencontre)
    ========================================================================= */
 
-const MEETING_POINTS = [
-  { n: 1, x: 20, y: 130 },
-  { n: 2, x: 70, y: 55 },
-  { n: 3, x: 120, y: 110 },
-  { n: 4, x: 175, y: 40 },
-  { n: 5, x: 225, y: 95 },
-  { n: 6, x: 270, y: 45 },
-];
 
-function MeetingPathsGame() {
-  const [next, setNext] = useState(1);
-  const [shake, setShake] = useState(null);
-  const done = next > MEETING_POINTS.length;
-
-  function handleClick(n) {
-    if (n === next) {
-      setNext(n + 1);
-    } else {
-      setShake(n);
-      setTimeout(() => setShake((s) => (s === n ? null : s)), 350);
+const MAZE_COLS = 6;
+const MAZE_ROWS = 5;
+const MAZE_CELL = 46;
+ 
+function generateMaze(cols, rows) {
+  const cells = Array.from({ length: rows }, () =>
+    Array.from({ length: cols }, () => ({ top: true, right: true, bottom: true, left: true }))
+  );
+  const seen = Array.from({ length: rows }, () => Array(cols).fill(false));
+ 
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+ 
+  function neighbors(r, c) {
+    const list = [];
+    if (r > 0) list.push([r - 1, c, "top", "bottom"]);
+    if (r < rows - 1) list.push([r + 1, c, "bottom", "top"]);
+    if (c > 0) list.push([r, c - 1, "left", "right"]);
+    if (c < cols - 1) list.push([r, c + 1, "right", "left"]);
+    return list;
+  }
+ 
+  // Parcours en profondeur itératif (pile) pour éviter tout souci de récursion
+  const stack = [[0, 0]];
+  seen[0][0] = true;
+  while (stack.length) {
+    const [r, c] = stack[stack.length - 1];
+    const options = shuffle(neighbors(r, c)).filter(([nr, nc]) => !seen[nr][nc]);
+    if (options.length === 0) {
+      stack.pop();
+      continue;
+    }
+    const [nr, nc, wallHere, wallThere] = options[0];
+    cells[r][c][wallHere] = false;
+    cells[nr][nc][wallThere] = false;
+    seen[nr][nc] = true;
+    stack.push([nr, nc]);
+  }
+  return cells;
+}
+ 
+function getSvgPoint(svg, clientX, clientY) {
+  const pt = svg.createSVGPoint();
+  pt.x = clientX;
+  pt.y = clientY;
+  const ctm = svg.getScreenCTM();
+  if (!ctm) return { x: 0, y: 0 };
+  const p = pt.matrixTransform(ctm.inverse());
+  return { x: p.x, y: p.y };
+}
+ 
+function MazeGame() {
+  const [maze, setMaze] = useState(() => generateMaze(MAZE_COLS, MAZE_ROWS));
+  const [path, setPath] = useState([[0, 0]]);
+  const [solved, setSolved] = useState(false);
+  const svgRef = useRef(null);
+  const draggingRef = useRef(false);
+ 
+  const endCell = [MAZE_ROWS - 1, MAZE_COLS - 1];
+  const W = MAZE_COLS * MAZE_CELL;
+  const H = MAZE_ROWS * MAZE_CELL;
+ 
+  function cellFromEvent(e) {
+    const { x, y } = getSvgPoint(svgRef.current, e.clientX, e.clientY);
+    const c = Math.floor(x / MAZE_CELL);
+    const r = Math.floor(y / MAZE_CELL);
+    return { r, c };
+  }
+ 
+  function handlePointerDown(e) {
+    if (solved) return;
+    const { r, c } = cellFromEvent(e);
+    if (r === 0 && c === 0) {
+      draggingRef.current = true;
+      setPath([[0, 0]]);
+      try {
+        e.currentTarget.setPointerCapture(e.pointerId);
+      } catch (err) {}
     }
   }
-
+ 
+  function handlePointerMove(e) {
+    if (!draggingRef.current || solved) return;
+    const { r, c } = cellFromEvent(e);
+    if (r < 0 || r >= MAZE_ROWS || c < 0 || c >= MAZE_COLS) return;
+ 
+    setPath((prev) => {
+      const [lr, lc] = prev[prev.length - 1];
+      if (lr === r && lc === c) return prev;
+ 
+      if (prev.length > 1) {
+        const [pr, pc] = prev[prev.length - 2];
+        if (pr === r && pc === c) return prev.slice(0, -1);
+      }
+ 
+      const dr = r - lr;
+      const dc = c - lc;
+      if (Math.abs(dr) + Math.abs(dc) !== 1) return prev;
+ 
+      const cell = maze[lr][lc];
+      let open = false;
+      if (dr === -1 && !cell.top) open = true;
+      if (dr === 1 && !cell.bottom) open = true;
+      if (dc === -1 && !cell.left) open = true;
+      if (dc === 1 && !cell.right) open = true;
+      if (!open) return prev;
+ 
+      if (prev.some(([pr, pc]) => pr === r && pc === c)) return prev;
+ 
+      const next = [...prev, [r, c]];
+      if (r === endCell[0] && c === endCell[1]) setSolved(true);
+      return next;
+    });
+  }
+ 
+  function handlePointerUp() {
+    draggingRef.current = false;
+    setPath((prev) => {
+      const [lr, lc] = prev[prev.length - 1];
+      if (lr === endCell[0] && lc === endCell[1]) return prev;
+      return [[0, 0]];
+    });
+  }
+ 
+  function handleReset() {
+    setMaze(generateMaze(MAZE_COLS, MAZE_ROWS));
+    setPath([[0, 0]]);
+    setSolved(false);
+  }
+ 
+  const center = ([r, c]) => [c * MAZE_CELL + MAZE_CELL / 2, r * MAZE_CELL + MAZE_CELL / 2];
+ 
   return (
     <div style={{ textAlign: "center" }}>
-      <svg viewBox="0 0 290 160" style={{ width: "100%", maxWidth: 380, margin: "0 auto", display: "block" }}>
-        {MEETING_POINTS.slice(0, -1).map((p, i) => {
-          const q = MEETING_POINTS[i + 1];
-          return <DrawLine key={i} d={`M${p.x},${p.y} L${q.x},${q.y}`} active={next > i + 1} />;
-        })}
-        {MEETING_POINTS.map((p) => {
-          const connected = p.n < next || done;
-          return (
-            <g
-              key={p.n}
-              onClick={() => handleClick(p.n)}
-              className={shake === p.n ? "dot-shake" : undefined}
-              style={{ cursor: "pointer" }}
-            >
-              <circle cx={p.x} cy={p.y} r={14} fill={connected ? COLORS.wine : COLORS.paper} stroke={COLORS.wine} strokeWidth={2} />
-              <text
-                x={p.x}
-                y={p.y + 4}
-                textAnchor="middle"
-                style={{
-                  fontFamily: "'Work Sans', sans-serif",
-                  fontSize: 12,
-                  fontWeight: 700,
-                  fill: connected ? COLORS.cream : COLORS.wine,
-                  pointerEvents: "none",
-                }}
-              >
-                {p.n}
-              </text>
-            </g>
-          );
-        })}
+      <svg
+        ref={svgRef}
+        viewBox={`0 0 ${W} ${H}`}
+        style={{ width: "100%", maxWidth: 320, margin: "0 auto", display: "block", touchAction: "none" }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerLeave={handlePointerUp}
+      >
+        <rect x={0} y={0} width={W} height={H} fill={COLORS.paper} />
+ 
+        {/* chemin tracé */}
+        {path.length > 1 && (
+          <polyline
+            points={path.map((cell) => center(cell).join(",")).join(" ")}
+            fill="none"
+            stroke={COLORS.wine}
+            strokeWidth={9}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            opacity={0.85}
+          />
+        )}
+ 
+        {/* murs du labyrinthe */}
+        {maze.map((row, r) =>
+          row.map((cell, c) => {
+            const x0 = c * MAZE_CELL;
+            const y0 = r * MAZE_CELL;
+            const x1 = x0 + MAZE_CELL;
+            const y1 = y0 + MAZE_CELL;
+            const segs = [];
+            if (cell.top) segs.push(`M${x0},${y0} L${x1},${y0}`);
+            if (cell.left) segs.push(`M${x0},${y0} L${x0},${y1}`);
+            if (r === MAZE_ROWS - 1 && cell.bottom) segs.push(`M${x0},${y1} L${x1},${y1}`);
+            if (c === MAZE_COLS - 1 && cell.right) segs.push(`M${x1},${y0} L${x1},${y1}`);
+            return segs.map((d, i) => (
+              <path key={`${r}-${c}-${i}`} d={d} stroke={COLORS.saugeD} strokeWidth={3} strokeLinecap="round" />
+            ));
+          })
+        )}
+ 
+        {/* départ */}
+        <circle cx={center([0, 0])[0]} cy={center([0, 0])[1]} r={13} fill={COLORS.wine} />
+        {/* arrivée */}
+        <circle cx={center(endCell)[0]} cy={center(endCell)[1]} r={13} fill={solved ? COLORS.wine : COLORS.sauge} style={{ transition: "fill .3s ease" }} />
       </svg>
-
-      {done ? (
+ 
+      {solved ? (
         <p style={{ ...bodyTextStyle, marginTop: ".75rem", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
           Et c'est ainsi que leurs chemins se sont croisés.
-          <Heart size={16} color={COLORS.wine} fill={COLORS.wine} />
+          <Heart size={16} color={COLORS.wine} fill={COLORS.wine} className="pulse-heart" />
         </p>
       ) : (
-        <p style={{ ...capStyle, marginTop: ".75rem" }}>Cliquez sur les points dans l'ordre, de 1 à {MEETING_POINTS.length}.</p>
+        <p style={{ ...capStyle, marginTop: ".75rem" }}>
+          Partez du point rose, glissez le doigt (ou la souris) dans le labyrinthe jusqu'au point vert, sans lever le trait.
+        </p>
       )}
-      <button onClick={() => setNext(1)} style={resetBtnStyle}>
-        ↺ Recommencer
+      <button onClick={handleReset} style={resetBtnStyle}>
+        ↺ {solved ? "Recommencer" : "Nouveau labyrinthe"}
       </button>
     </div>
   );
 }
+
 
 /* =========================================================================
    JEU 2 — Chapitre II : deviner la distance (slider "train")
@@ -329,6 +461,7 @@ function DistanceGame() {
 
   return (
     <div style={{ textAlign: "center" }}>
+      <p style={{ ...capStyle, marginBottom: ".5rem" }}>Devinez la distance qu'ils devaient parcourir:</p>
       <div
         ref={trackRef}
         onPointerDown={onPointerDown}
@@ -399,394 +532,6 @@ function DistanceGame() {
   );
 }
 
-/* =========================================================================
-   JEU 3 — Chapitre III : charger le camion (déménagement en Normandie)
-   ========================================================================= */
-
-const MOVING_ITEMS = [
-  { id: "lit", label: "Le lit", Icon: Bed },
-  { id: "canape", label: "Le canapé", Icon: Armchair },
-  { id: "lampe", label: "La lampe", Icon: Lamp },
-  { id: "velo", label: "Le vélo", Icon: Bike },
-  { id: "plante", label: "La plante", Icon: Flower2 },
-  { id: "livres", label: "Les livres", Icon: BookOpen },
-];
-
-function PackingGame() {
-  const [packed, setPacked] = useState([]);
-  const allPacked = packed.length === MOVING_ITEMS.length;
-
-  function toggle(id) {
-    setPacked((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
-  }
-
-  return (
-    <div style={{ textAlign: "center" }}>
-      <p style={{ ...capStyle, marginBottom: ".5rem" }}>Cliquez sur les objets pour les charger dans le camion.</p>
-      <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: ".5rem", marginBottom: "1.25rem" }}>
-        {MOVING_ITEMS.map(({ id, label, Icon }) => {
-          const isPacked = packed.includes(id);
-          return (
-            <button
-              key={id}
-              onClick={() => toggle(id)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: ".4rem",
-                padding: ".45rem .75rem",
-                borderRadius: 999,
-                border: `1.5px solid ${isPacked ? COLORS.wine : COLORS.saugeD}`,
-                background: isPacked ? COLORS.wine : "transparent",
-                color: isPacked ? COLORS.cream : COLORS.inkSoft,
-                fontFamily: "'Work Sans', sans-serif",
-                fontSize: ".8rem",
-                fontWeight: 600,
-                cursor: "pointer",
-                opacity: isPacked ? 0.55 : 1,
-                transition: "all .25s ease",
-              }}
-            >
-              <Icon size={15} />
-              {label}
-            </button>
-          );
-        })}
-      </div>
-
-      <div style={{ position: "relative", maxWidth: 260, margin: "0 auto" }}>
-        <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "center" }}>
-          <div
-            style={{
-              width: 160,
-              height: 92,
-              background: COLORS.paper,
-              border: `2.5px solid ${COLORS.saugeD}`,
-              borderRadius: "8px 8px 0 0",
-              position: "relative",
-              display: "flex",
-              flexWrap: "wrap",
-              alignContent: "flex-start",
-              gap: 4,
-              padding: 8,
-            }}
-          >
-            {MOVING_ITEMS.filter((it) => packed.includes(it.id)).map(({ id, Icon }) => (
-              <Icon key={id} size={17} color={COLORS.wine} className="pack-pop" />
-            ))}
-          </div>
-          <div style={{ width: 42, height: 56, background: COLORS.wine, borderRadius: "0 8px 4px 0", marginLeft: -2 }} />
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-around", marginTop: -6 }}>
-          <div style={{ width: 20, height: 20, borderRadius: "50%", background: COLORS.ink }} />
-          <div style={{ width: 20, height: 20, borderRadius: "50%", background: COLORS.ink }} />
-        </div>
-      </div>
-
-      <p style={{ ...capStyle, marginTop: ".9rem" }}>
-        {packed.length} / {MOVING_ITEMS.length} chargés
-      </p>
-      {allPacked && (
-        <p style={{ ...bodyTextStyle, color: COLORS.wine, fontWeight: 600, marginTop: ".4rem" }}>
-          Camion prêt, direction la Normandie ! 🚚
-        </p>
-      )}
-    </div>
-  );
-}
-
-/* =========================================================================
-   JEU 4 — Chapitre IV : retrouver les pays visités
-   🔧 Personnalisez librement DESTINATIONS avec vos vrais voyages
-   (visited: true/false, x/y en % de position sur la zone).
-   ========================================================================= */
-
-const DESTINATIONS = [
-  { id: 1, name: "France", visited: true, x: 48, y: 58 },
-  { id: 2, name: "Italie", visited: true, x: 60, y: 66 },
-  { id: 3, name: "Portugal", visited: true, x: 34, y: 62 },
-  { id: 4, name: "Grèce", visited: false, x: 66, y: 72 },
-  { id: 5, name: "Islande", visited: true, x: 44, y: 16 },
-  { id: 6, name: "Maroc", visited: false, x: 42, y: 82 },
-  { id: 7, name: "Japon", visited: false, x: 92, y: 54 },
-  { id: 8, name: "Norvège", visited: true, x: 56, y: 14 },
-];
-
-function TravelMapGame() {
-  const totalVisited = DESTINATIONS.filter((d) => d.visited).length;
-  const [found, setFound] = useState([]);
-  const [hint, setHint] = useState(null);
-  const complete = found.length === totalVisited;
-
-  function handleClick(d) {
-    if (d.visited) {
-      setFound((f) => (f.includes(d.id) ? f : [...f, d.id]));
-    } else {
-      setHint(d.id);
-      setTimeout(() => setHint((h) => (h === d.id ? null : h)), 900);
-    }
-  }
-
-  return (
-    <div style={{ textAlign: "center" }}>
-      <p style={{ ...capStyle, marginBottom: ".5rem" }}>Cliquez sur les points où ils sont déjà allés.</p>
-      <div
-        style={{
-          position: "relative",
-          maxWidth: 440,
-          height: 230,
-          margin: "0 auto 1rem",
-          borderRadius: 20,
-          overflow: "hidden",
-          background: `radial-gradient(circle at 30% 20%, ${COLORS.blush}55, transparent 55%), radial-gradient(circle at 75% 70%, ${COLORS.sauge}55, transparent 55%), ${COLORS.paper}`,
-          border: `1px dashed ${COLORS.saugeD}66`,
-        }}
-      >
-        {DESTINATIONS.map((d) => {
-          const isFound = found.includes(d.id);
-          const isHint = hint === d.id;
-          return (
-            <button
-              key={d.id}
-              onClick={() => handleClick(d)}
-              style={{
-                position: "absolute",
-                left: `${d.x}%`,
-                top: `${d.y}%`,
-                transform: "translate(-50%,-50%)",
-                border: "none",
-                background: "none",
-                cursor: "pointer",
-                padding: 0,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-              }}
-            >
-              <span
-                style={{
-                  width: isFound ? 16 : 12,
-                  height: isFound ? 16 : 12,
-                  borderRadius: "50%",
-                  display: "block",
-                  background: isFound ? COLORS.wine : `${COLORS.saugeD}99`,
-                  boxShadow: isFound ? `0 0 0 5px ${COLORS.wine}22` : "none",
-                  transition: "all .3s cubic-bezier(.34,1.56,.64,1)",
-                }}
-              />
-              {(isFound || isHint) && (
-                <span
-                  style={{
-                    marginTop: 4,
-                    fontFamily: "'Work Sans', sans-serif",
-                    fontSize: ".66rem",
-                    fontWeight: 700,
-                    color: isFound ? COLORS.wine : COLORS.saugeD,
-                    background: COLORS.paper,
-                    padding: "1px 6px",
-                    borderRadius: 6,
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {isFound ? `${d.name} ✓` : "pas encore..."}
-                </span>
-              )}
-            </button>
-          );
-        })}
-      </div>
-      <p style={capStyle}>
-        {found.length} / {totalVisited} pays visités retrouvés
-      </p>
-      {complete && (
-        <p
-          style={{
-            ...bodyTextStyle,
-            color: COLORS.wine,
-            fontWeight: 600,
-            marginTop: ".4rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 6,
-          }}
-        >
-          Tous les pays visités ont été retrouvés ! <Plane size={16} />
-        </p>
-      )}
-    </div>
-  );
-}
-
-/* =========================================================================
-   JEU 5 — Chapitre V : retrouver les bêtises (notre fils à quatre pattes)
-   🔧 Personnalisez librement MEFAITS avec vos vraies anecdotes.
-   ========================================================================= */
-
-const MEFAITS = [
-  { id: 1, label: "Coussin éventré", emoji: "​🛋️", state : false },
-  { id: 2, label: "Manger des Airpods", emoji: "🎧", state : true },
-  { id: 3, label: "Croquer un mur", emoji: "​🧱​", state : false },
-  { id: 5, label: "Faire pipi sur quelqu'un", emoji: "🐕", state : false },
-  { id: 4, label: "Manger un passeport", emoji: "🛂", state : true },
-  { id: 6, label: "Manger un passeport", emoji: "🛂", state : true },
-];
-
-function MischiefGame() {
-  // Stocke les IDs trouvés : [1, 2]
-  const [found, setFound] = useState([]);
-  
-  // Stocke le statut par ID : { 1: "fail", 2: "success" }
-  const [statuses, setStatuses] = useState({});
-
-  const complete = found.length === MEFAITS.length;
-
-  function handleFind(item) {
-    // Si déjà cliqué, on ne fait rien
-    if (found.includes(item.id)) return;
-
-    
-    // 2. Mettre à jour le statut uniquement pour cet ID
-    const result = item.state ? "success" : "fail";
-    setStatuses((prev) => ({
-      ...prev,
-      [item.id]: result,
-    }));
-    // 1. Marquer comme trouvé
-    if (item.state){
-      setFound((prev) => [...prev, item.id]);
-    }
-  }
-
-  return (
-    <div style={{ textAlign: "center" }}>
-      <p style={{ ...capStyle, marginBottom: ".5rem" }}>Elément trouvé {found.length}/{MEFAITS.filter(item => item.state == true).length}</p>
-      {MEFAITS.map((m) => {
-        const isFound = found.includes(m.id);
-        // Récupère le statut spécifique de ce bouton (ou "default" si pas encore cliqué)
-        const itemStatus = statuses[m.id] || "default";
-
-        return (
-          <button
-            key={m.id}
-            onClick={() => handleFind(m)}
-            className={`rounded m-3 p-1 btn-bad-${itemStatus}`}
-          >
-            <p>
-              {m.emoji} {m.label}
-            </p>
-          </button>
-        );
-      })}
-    </div>
-  );
-              {/* {isFound && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "100%",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    marginTop: 4,
-                    background: COLORS.paper,
-                    color: COLORS.wine,
-                    fontFamily: "'Work Sans', sans-serif",
-                    fontSize: ".62rem",
-                    fontWeight: 700,
-                    padding: "2px 6px",
-                    borderRadius: 6,
-                    whiteSpace: "nowrap",
-                    boxShadow: "0 2px 6px rgba(0,0,0,.15)",
-                  }}
-                >
-                  {m.label}
-                </div>
-                </button>
-              );
-            })}
-            )} */}
-      {/* <p style={{ ...capStyle, marginBottom: ".5rem" }}>Il a fait {MEFAITS.length} bêtises dans la maison. Retrouvez-les toutes !</p>
-      <div
-        style={{
-          position: "relative",
-          maxWidth: 400,
-          height: 210,
-          margin: "0 auto 1rem",
-          borderRadius: 20,
-          background: `linear-gradient(180deg, ${COLORS.blush}44, ${COLORS.paper})`,
-          border: `1px solid ${COLORS.saugeD}33`,
-          overflow: "hidden",
-        }}
-      >
-        {MEFAITS.map((m) => {
-          const isFound = found.includes(m.id);
-          return (
-            <button
-              key={m.id}
-              onClick={() => handleFind(m.id)}
-              className={!isFound ? "pulse-dot" : undefined}
-              style={{
-                position: "absolute",
-                left: `${m.x}%`,
-                top: `${m.y}%`,
-                transform: "translate(-50%,-50%)",
-                border: "none",
-                background: "none",
-                cursor: "pointer",
-                fontSize: isFound ? 26 : 22,
-                filter: isFound ? "none" : "grayscale(1) opacity(.45)",
-                transition: "all .3s cubic-bezier(.34,1.56,.64,1)",
-              }}
-            >
-              {m.emoji}
-              {isFound && (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "100%",
-                    left: "50%",
-                    transform: "translateX(-50%)",
-                    marginTop: 4,
-                    background: COLORS.paper,
-                    color: COLORS.wine,
-                    fontFamily: "'Work Sans', sans-serif",
-                    fontSize: ".62rem",
-                    fontWeight: 700,
-                    padding: "2px 6px",
-                    borderRadius: 6,
-                    whiteSpace: "nowrap",
-                    boxShadow: "0 2px 6px rgba(0,0,0,.15)",
-                  }}
-                >
-                  {m.label}
-                </div>
-              )}
-            </button>
-          );
-        })}
-      </div>
-      <p style={capStyle}>
-        {found.length} / {MEFAITS.length} bêtises retrouvées
-      </p>
-      {complete && (
-        <p
-          style={{
-            ...bodyTextStyle,
-            color: COLORS.wine,
-            fontWeight: 600,
-            marginTop: ".4rem",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 6,
-          }}
-        >
-          Toutes les bêtises retrouvées... et on l'aime quand même ! <PawPrint size={16} />
-        </p>
-  //     )} */}
-  //   </div>
-  // );
-}
 
 /* =========================================================================
    COMPOSANT PRINCIPAL
@@ -804,17 +549,16 @@ export default function HistoireCouple() {
   return (
     <div className="hc-root" style={{ position: "relative" }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Work+Sans:wght@400;500;600;700&display=swap');
-
         .hc-root {
-          font-family: 'Work Sans', sans-serif;
           color: ${COLORS.ink};
           background: ${COLORS.paper};
-          overflow-x: hidden;
+        }
+        .hc-root section {
+          font-family: 'Instrument Serif', serif;
         }
         .hc-root em {
           font-style: italic;
-          font-family: 'Fraunces', serif;
+          font-family: 'Instrument Serif', serif;
           color: ${COLORS.wine};
         }
 
@@ -899,8 +643,14 @@ export default function HistoireCouple() {
 
       {/* ---- Fil rouge : rail de progression fixe (z-index modéré) ---- */}
       <div className="thread-rail">
-        <div className="thread-rail-fill" style={{ height: `${pageProgress * 100}%` }} />
-        <div className="thread-rail-marker" style={{ top: `${pageProgress * 100}%` }}>
+        <div
+          className="thread-rail-fill"
+          style={{ height: `${pageProgress * 100}%` }}
+        />
+        <div
+          className="thread-rail-marker"
+          style={{ top: `${pageProgress * 100}%` }}
+        >
           <Heart size={10} color={COLORS.paper} fill={COLORS.paper} />
         </div>
       </div>
@@ -924,15 +674,16 @@ export default function HistoireCouple() {
           style={{
             opacity: heroLoaded ? 1 : 0,
             transform: heroLoaded ? "translateY(0)" : "translateY(18px)",
-            transition: "opacity 1s ease, transform 1s cubic-bezier(.16,1,.3,1)",
+            transition:
+              "opacity 1s ease, transform 1s cubic-bezier(.16,1,.3,1)",
             maxWidth: 680,
           }}
         >
-          <Eyebrow>L'histoire d'un couple</Eyebrow>
+          <Eyebrow>L'histoire d'Elisa & Antonin</Eyebrow>
           <h1
             style={{
-              fontFamily: "'Fraunces', Georgia, serif",
-              fontWeight: 600,
+              fontFamily: "'Instrument Serif', serif",
+              fontWeight: 400,
               fontSize: "clamp(2.2rem, 7vw, 4rem)",
               lineHeight: 1.08,
               color: COLORS.ink,
@@ -945,7 +696,7 @@ export default function HistoireCouple() {
           </h1>
           <p
             style={{
-              fontFamily: "'Work Sans', sans-serif",
+              fontFamily: "'Instrument Serif', serif",
               fontSize: "1rem",
               lineHeight: 1.6,
               color: COLORS.saugeD,
@@ -953,7 +704,7 @@ export default function HistoireCouple() {
               margin: "0 auto",
             }}
           >
-            Le Nord. Paris. La Normandie. Une histoire à parcourir — et à jouer — jusqu'au bout.
+            Bully-le-mines. Paris. La Normandie. <br /> Une histoire qui voyage.
           </p>
         </div>
         <div
@@ -965,10 +716,22 @@ export default function HistoireCouple() {
             gap: ".35rem",
           }}
         >
-          <span style={{ fontFamily: "'Work Sans', sans-serif", fontSize: ".7rem", letterSpacing: ".14em", textTransform: "uppercase", color: COLORS.saugeD }}>
+          <span
+            style={{
+              fontFamily: "'Instrument Serif', serif",
+              fontSize: ".7rem",
+              letterSpacing: ".14em",
+              textTransform: "uppercase",
+              color: COLORS.saugeD,
+            }}
+          >
             Faites défiler
           </span>
-          <ChevronDown className="bounce-chevron" size={18} color={COLORS.wine} />
+          <ChevronDown
+            className="bounce-chevron"
+            size={18}
+            color={COLORS.wine}
+          />
         </div>
       </section>
 
@@ -978,12 +741,18 @@ export default function HistoireCouple() {
           <div style={narrowWrap}>
             <Eyebrow>Chapitre I — la rencontre</Eyebrow>
             <h2 style={chapterTitleStyle}>Deux chemins qui se croisent</h2>
-            <p style={bodyTextStyle}>Rien ne les destinait à se rencontrer. Et pourtant, leurs chemins ont fini par se croiser.</p>
+            <p style={bodyTextStyle}>
+              Lors de l’anniversaire du frère d’Antonin, leurs chemins se
+              croisent pour la première fois. Un regard, un feeling… et
+              rapidement, l’envie de ne plus se quitter. Sur un coup de tête,
+              ils décident même de partir en vacances ensemble, pour apprendre à
+              se connaître et voir où cette histoire les mènerait.
+            </p>
           </div>
         </Reveal>
         <Reveal delay={0.12}>
           <div style={{ marginTop: "1.25rem" }}>
-            <MeetingPathsGame />
+            <MazeGame />
           </div>
         </Reveal>
       </section>
@@ -994,7 +763,14 @@ export default function HistoireCouple() {
           <div style={narrowWrap}>
             <Eyebrow>Chapitre II — la distance</Eyebrow>
             <h2 style={chapterTitleStyle}>Un week-end sur deux</h2>
-            <p style={bodyTextStyle}>Le Nord d'un côté, Paris de l'autre. Seul le week-end les réunissait.</p>
+            <p style={bodyTextStyle}>
+              Pendant deux ans, leur histoire s’écrit entre Arras et Paris, au
+              rythme des allers-retours en train. Un week-end sur deux, le même
+              rituel : Vendredi soir : valise prête, direction la gare… pour les
+              retrouvailles. Dimanche soir : valise prête, direction la gare…
+              pour les au revoirs. Des kilomètres parcourus, des heures dans les
+              trains, des week-ends trop courts… la SNCF devrait nous remercier.
+            </p>
           </div>
         </Reveal>
         <Reveal delay={0.12}>
@@ -1010,12 +786,13 @@ export default function HistoireCouple() {
           <div style={narrowWrap}>
             <Eyebrow>Chapitre III — notre chez-nous</Eyebrow>
             <h2 style={chapterTitleStyle}>Direction la Normandie</h2>
-            <p style={bodyTextStyle}>Les études terminées, plus besoin de compter les kilomètres. Direction un chez-eux, à eux deux.</p>
-          </div>
-        </Reveal>
-        <Reveal delay={0.12}>
-          <div style={{ marginTop: "1.25rem" }}>
-            <PackingGame />
+            <p style={bodyTextStyle}>
+              Puis vient le moment où les études se terminent. Plus besoin de
+              compter les kilomètres. Plus besoin de regarder le calendrier pour
+              savoir quand aura lieu la prochaine retrouvaille. Direction la
+              Normandie, pour construire quelque chose de nouveau : un chez-eux,
+              à eux deux.
+            </p>
           </div>
         </Reveal>
       </section>
@@ -1025,15 +802,27 @@ export default function HistoireCouple() {
         <Reveal>
           <div style={narrowWrap}>
             <Eyebrow>Chapitre IV — les voyages</Eyebrow>
-            <h2 style={{ ...chapterTitleStyle, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-              Valises prêtes, direction ailleurs <Plane size={20} color={COLORS.wine} />
+            <h2
+              style={{
+                ...chapterTitleStyle,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+              }}
+            >
+              Valises prêtes, direction ailleurs{" "}
+              <Plane size={20} color={COLORS.wine} />
             </h2>
-            <p style={bodyTextStyle}>Depuis, entre deux trains, ils ont surtout pris goût aux départs.</p>
-          </div>
-        </Reveal>
-        <Reveal delay={0.12}>
-          <div style={{ marginTop: "1.25rem" }}>
-            <TravelMapGame />
+            <p style={bodyTextStyle}>
+              Les valises, elles, n’ont jamais vraiment eu le temps de prendre
+              la poussière. Après les kilomètres parcourus en train, l’envie de
+              partir à deux ne les a jamais quittés. Alors, dès qu’une occasion
+              se présente, ils partent découvrir de nouveaux horizons, de
+              nouvelles cultures et de nouveaux paysages à travers le monde.
+              Parce que pour eux, le plus important n’a jamais été la
+              destination, mais tout ce qu’ils vivent ensemble sur le chemin.
+            </p>
           </div>
         </Reveal>
       </section>
@@ -1043,15 +832,26 @@ export default function HistoireCouple() {
         <Reveal>
           <div style={narrowWrap}>
             <Eyebrow>Chapitre V — notre fils (à quatre pattes 🐾)</Eyebrow>
-            <h2 style={{ ...chapterTitleStyle, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-              Un compagnon plein de bêtises <Dog size={20} color={COLORS.wine} />
+            <h2
+              style={{
+                ...chapterTitleStyle,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
+              }}
+            >
+              Un compagnon plein de bêtises{" "}
+              <Dog size={20} color={COLORS.wine} />
             </h2>
-            <p style={bodyTextStyle}>Un jour, un petit compagnon à quatre pattes a rejoint l'aventure. Adorable... et un brin chapardeur.</p>
-          </div>
-        </Reveal>
-        <Reveal delay={0.12}>
-          <div style={{ marginTop: "1.25rem" }}>
-            <MischiefGame />
+            <p style={bodyTextStyle}>
+              Et puis, un jour, un nouveau compagnon à quatre pattes rejoint
+              l’aventure. Un fils adorable… …qui sait aussi se transformer en
+              véritable petit démon quand l’envie lui prend. 🐾 Depuis, il
+              partage leur quotidien… et y ajoute quelques bêtises. Parce qu’une
+              famille, ça se construit aussi avec des poils sur le canapé, des
+              jouets qui traînent et beaucoup, beaucoup d’amour.
+            </p>
           </div>
         </Reveal>
       </section>
@@ -1069,18 +869,54 @@ export default function HistoireCouple() {
             <Eyebrow>Chapitre VI — pour la vie</Eyebrow>
             <h2 style={chapterTitleStyle}>S'unir pour la vie</h2>
 
-            <svg viewBox="0 0 100 50" style={{ width: 90, height: 45, margin: "1rem auto", display: "block", animation: "ringFade .9s ease" }}>
-              <circle cx="38" cy="25" r="18" fill="none" stroke={COLORS.wine} strokeWidth="3" />
-              <circle cx="62" cy="25" r="18" fill="none" stroke={COLORS.wine} strokeWidth="3" opacity="0.75" />
+            <svg
+              viewBox="0 0 100 50"
+              style={{
+                width: 90,
+                height: 45,
+                margin: "1rem auto",
+                display: "block",
+                animation: "ringFade .9s ease",
+              }}
+            >
+              <circle
+                cx="38"
+                cy="25"
+                r="18"
+                fill="none"
+                stroke={COLORS.wine}
+                strokeWidth="3"
+              />
+              <circle
+                cx="62"
+                cy="25"
+                r="18"
+                fill="none"
+                stroke={COLORS.wine}
+                strokeWidth="3"
+                opacity="0.75"
+              />
             </svg>
 
-            <p style={bodyTextStyle}>Et aujourd'hui, ils choisissent de s'unir... pour la vie.</p>
+            <p style={bodyTextStyle}>
+              Après toutes ces aventures et ces moments de bonheur partagés.
+              Elisa et Antonin continuent l’aventure et decident de s’unir pour
+              la vie. Si vous lisez ces quelques mots c’est que vous faites
+              partie de l’aventure pour partager ce jour si important : Leur
+              mariage. <br />
+              Bien d'autres chapitres les attendent...
+            </p>
 
             <div style={{ marginTop: "1.5rem" }}>
-              <Heart className="pulse-heart" size={24} color={COLORS.wine} fill={COLORS.wine} />
+              <Heart
+                className="pulse-heart"
+                size={24}
+                color={COLORS.wine}
+                fill={COLORS.wine}
+              />
               <p
                 style={{
-                  fontFamily: "'Work Sans', sans-serif",
+                  fontFamily: "'Instrument Serif', serif",
                   fontSize: ".82rem",
                   letterSpacing: ".06em",
                   textTransform: "uppercase",
@@ -1094,7 +930,7 @@ export default function HistoireCouple() {
           </div>
         </Reveal>
       </section>
-      <GlassNavBar index={1}/>
+      <GlassNavBar index={1} />
     </div>
   );
 }

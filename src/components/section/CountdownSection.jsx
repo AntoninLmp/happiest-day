@@ -14,8 +14,8 @@ function CountdownSection() {
         <CountdownUntil />
         <div className="text-center p-4">
           <p className="instrument-serif-regular c-pink3 text-3xl">
-            Plein d'informations à venir... <br />
-            On vous tiens au courant !
+            Plus d'informations à venir... <br />
+            On vous tient au courant !
           </p>
         </div>
       </section>

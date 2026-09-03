@@ -4,11 +4,13 @@ import Home from "./components/Home";
 import LoveStory from "./components/LoveStory";
 import Informations from './components/section/Informations';
 import Confirmation from './components/section/Confirmation';
+import ScrollToTop from './components/ScrollToTop';
 
 
 export default function App (){
   return (
     <Router>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Home isLetter={true}/>} />
           <Route path="/home" element={<Home isLetter={false} />} />

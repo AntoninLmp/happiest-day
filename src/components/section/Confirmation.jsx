@@ -14,7 +14,7 @@ export default function Confirmation() {
         </p>
       </header>
 
-      <main className="confirmation-card" aria-describedby="confirmation-status">
+      <main className="confirmation-card mb-10!" aria-describedby="confirmation-status">
         <div className="confirmation-card__topline">
           <span>Votre réponse</span>
           <span className="confirmation-status-dot" aria-hidden="true"></span>
